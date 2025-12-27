@@ -1,0 +1,40 @@
+ 
+ @font-face{
+  font-family: inter-Var;
+  src: url('/public/fonts/Inter/Inter-VariableFont_opsz\,wght.ttf');
+  font-weight: 700;
+ }
+ 
+  
+ @font-face{
+  font-family: inter-Var;
+  src: url('/public/fonts/Inter/Inter-VariableFont_opsz\,wght.ttf');
+  font-weight: 600;
+ }
+  
+ @font-face{
+  font-family: inter-Var;
+  src: url('/public/fonts/Inter/Inter-VariableFont_opsz\,wght.ttf');
+  font-weight: 500;
+ }
+  
+ @font-face{
+  font-family: inter-Var;
+  src: url('/public/fonts/Inter/Inter-VariableFont_opsz\,wght.ttf');
+  font-weight: 400;
+ }
+ 
+ 
+ @font-face {
+  font-family: inter-ital;
+  src: url('/public/fonts/Inter/Inter-Italic-VariableFont_opsz\,wght.ttf');
+  font-weight: 700;
+ }
+ h1.main-title{
+  margin: 50px auto;
+  width: 500px;
+  text-align: center;
+  font-size: 50px;
+  font-weight: 700;
+
+ }
