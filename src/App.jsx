@@ -41,42 +41,40 @@ function App() {
 
   const { t, i18n } = useTranslation();
   const [local, setLocal] = useState("en");
-
   useEffect(() => {
     setDate(moment().format("MMM Do YY"));
 
-    axios
-      .get(
-        `https://api.openweathermap.org/data/2.5/weather?lat=31.03637&lon=31.38069&appid=082815cd7822c9d0bc944a422e9667c1`,
-        {
-          cancelToken: new axios.CancelToken((c) => {
-            cancelTokenOperator = c;
-          }),
-        }
-      )
-      .then((response) => {
-        const temp = Math.round(response.data.main.temp - 273.15);
-        const min = Math.round(response.data.main.temp_min - 273.15);
-        const max = Math.round(response.data.main.temp_max - 273.15);
-        const description = response.data.weather[0].description;
-        const icon = response.data.weather[0].icon;
-        console.log(icon);
-        setTemp({
-          temp,
-          min,
-          max,
-          description,
-          icon,
-        });
-      })
-      .catch((err) => {
-        console.log(`The Error while get Tepm is>>>>>>>>>>>>>${err}`);
-      });
-    return () => {
-      cancelTokenOperator();
-    };
-  }, []);
+    // 1. طلب إحداثيات المستخدم من المتصفح
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
 
+        // 2. إرسال طلب الـ API باستخدام الإحداثيات بدلاً من الاسم
+        const apiKey = '082815cd7822c9d0bc944a422e9667c1';
+        const url = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric&lang=${local}`;
+
+        axios
+          .get(url)
+          .then((response) => {
+            // هنا ستحصل على بيانات مدينة المستخدم الحالية تلقائياً
+            setTemp({
+              temp: Math.round(response.data.main.temp),
+              min:Math.round(response.data.main.temp_min),
+              max:Math.round(response.data.main.temp_max)
+              ,
+              name: response.data.name, // سيظهر اسم المدينة تلقائياً (مثلاً: المنصورة)
+              description: response.data.weather[0].description,
+              icon: response.data.weather[0].icon,
+            });
+          })
+          .catch((error) => console.log("Error fetching weather:", error));
+      },
+      (error) => {
+        // في حال رفض المستخدم إعطاء الإذن، يمكنك وضع مدينة افتراضية
+        console.log("User denied location access", error);
+      }
+    );
+  }, [local]); // يتحدث عند تغيير اللغة أيضاً
   function translateText() {
     if (local == "ar") {
       setLocal("en");
@@ -97,9 +95,7 @@ function App() {
     <>
       <ThemeProvider theme={theme}>
         <Container maxWidth="sm" style={{}}>
-          <Typography variant="h1" className="main-title">
-            Weather Site
-          </Typography>
+          
           <div className="flex-container" style={{ height: "100vh" }}>
             <div
               className="content"
@@ -126,7 +122,7 @@ function App() {
 
                 <div
                   className="header"
-                  dir={local =='en'?'ltr':'rtl'}
+                  dir={local == "en" ? "ltr" : "rtl"}
                   style={{
                     width: "100%",
                     display: "flex",
@@ -157,7 +153,7 @@ function App() {
                 <hr />
                 <div
                   className="body"
-                  dir={local =='en'?'ltr':'rtl'}
+                  dir={local == "en" ? "ltr" : "rtl"}
                   style={{
                     display: "flex",
                     color: "white",
