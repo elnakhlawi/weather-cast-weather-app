@@ -35,6 +35,7 @@ function App() {
     temp: null,
     min: null,
     max: null,
+    name: null,
     description: null,
     icon: null,
   });
@@ -50,7 +51,7 @@ function App() {
         const { latitude, longitude } = position.coords;
 
         // 2. إرسال طلب الـ API باستخدام الإحداثيات بدلاً من الاسم
-        const apiKey = '082815cd7822c9d0bc944a422e9667c1';
+        const apiKey = "082815cd7822c9d0bc944a422e9667c1";
         const url = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric&lang=${local}`;
 
         axios
@@ -59,9 +60,8 @@ function App() {
             // هنا ستحصل على بيانات مدينة المستخدم الحالية تلقائياً
             setTemp({
               temp: Math.round(response.data.main.temp),
-              min:Math.round(response.data.main.temp_min),
-              max:Math.round(response.data.main.temp_max)
-              ,
+              min: Math.round(response.data.main.temp_min),
+              max: Math.round(response.data.main.temp_max),
               name: response.data.name, // سيظهر اسم المدينة تلقائياً (مثلاً: المنصورة)
               description: response.data.weather[0].description,
               icon: response.data.weather[0].icon,
@@ -95,7 +95,6 @@ function App() {
     <>
       <ThemeProvider theme={theme}>
         <Container maxWidth="sm" style={{}}>
-          
           <div className="flex-container" style={{ height: "100vh" }}>
             <div
               className="content"
@@ -138,7 +137,7 @@ function App() {
                       fontWeight: "bold",
                     }}
                   >
-                    {t("Mansourah")}
+                    {t(temp.name)}
                   </Typography>
                   <Typography
                     variant="h6"
